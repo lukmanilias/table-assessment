@@ -8,14 +8,8 @@
 
     <style>
         #table1,
-        #table2 {
+        #table2{
             border-collapse: collapse;
-        }
-
-        #table1 {
-            border-collapse: collapse;
-            /* width: 100%; */
-            /* Add width to ensure the table takes the full width of its container */
         }
 
         #table1 td {
@@ -30,9 +24,17 @@
             text-align: right;
         }
 
+        #table2 th,
         #table2 td {
-            padding: 10px;
+            width: 200px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            text-align: center;
             border: 1px solid #000;
+        }
+
+        #table2 th {
+            font-weight: bold;
         }
     </style>
 </head>
@@ -46,12 +48,20 @@
     <h2>Table 2</h2><br>
 
     <!-- Display computed values for Table 2 here -->
-    <table id="table2"></table>
+    <table id="table2">
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
 
     <script>
         // HTML tables 
         var table1 = document.getElementById("table1");
-        var table2 = document.getElementById("table2");
+        var table2 = document.getElementById("table2").getElementsByTagName('tbody')[0];
 
         // AJAX for Table 1
         fetch("Table_Input.csv")
@@ -64,7 +74,7 @@
                 for (let row of rows) {
                     let cols = row.match(/(?:\"([^\"]*(?:\"\"[^\"]*)*)\")|([^\",]+)/g);
                     if (cols != null) {
-                        let tr = table1.insertRow(); // Fix: Change 'table' to 'table1'
+                        let tr = table1.insertRow();
                         for (let col of cols) {
                             let td = tr.insertCell();
                             td.innerHTML = col;
