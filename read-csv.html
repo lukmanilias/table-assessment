@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table Assessment</title>
+
+    <style>
+        #table1,
+        #table2 {
+            border-collapse: collapse;
+        }
+
+        #table1 {
+            border-collapse: collapse;
+            /* width: 100%; */
+            /* Add width to ensure the table takes the full width of its container */
+        }
+
+        #table1 td {
+            border: 1px solid #000;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            padding-left: 0px;
+            padding-right: 10px;
+        }
+
+        #table1 td:last-child {
+            text-align: right;
+        }
+
+        #table2 td {
+            padding: 10px;
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Table 1</h2><br>
+
+    <!-- Display csv file here -->
+    <table id="table1"></table><br><br>
+
+    <h2>Table 2</h2><br>
+
+    <!-- Display computed values for Table 2 here -->
+    <table id="table2"></table>
+
+    <script>
+        // HTML tables 
+        var table1 = document.getElementById("table1");
+        var table2 = document.getElementById("table2");
+
+        // AJAX for Table 1
+        fetch("Table_Input.csv")
+            .then(res => res.text())
+            .then(csv => {
+                // Split into rows and 
+                let rows = csv.split("\r\n");
+
+                // Loop through all the rows and do split column
+                for (let row of rows) {
+                    let cols = row.match(/(?:\"([^\"]*(?:\"\"[^\"]*)*)\")|([^\",]+)/g);
+                    if (cols != null) {
+                        let tr = table1.insertRow(); // Fix: Change 'table' to 'table1'
+                        for (let col of cols) {
+                            let td = tr.insertCell();
+                            td.innerHTML = col;
+                        }
+                    }
+                }
+
+                // Compute values for Table 2
+                let alphaValue = parseInt(table1.rows[5].cells[1].textContent) + parseInt(table1.rows[20].cells[1].textContent);
+                let betaValue = parseInt(table1.rows[15].cells[1].textContent) / parseInt(table1.rows[7].cells[1].textContent);
+                let charlieValue = parseInt(table1.rows[13].cells[1].textContent) * parseInt(table1.rows[12].cells[1].textContent);
+
+                // Display values in Table 2
+                let trAlpha = table2.insertRow();
+                let tdAlphaCategory = trAlpha.insertCell();
+                let tdAlphaValue = trAlpha.insertCell();
+                tdAlphaCategory.innerHTML = "Alpha";
+                tdAlphaValue.innerHTML = alphaValue;
+
+                let trBeta = table2.insertRow();
+                let tdBetaCategory = trBeta.insertCell();
+                let tdBetaValue = trBeta.insertCell();
+                tdBetaCategory.innerHTML = "Beta";
+                tdBetaValue.innerHTML = betaValue;
+
+                let trCharlie = table2.insertRow();
+                let tdCharlieCategory = trCharlie.insertCell();
+                let tdCharlieValue = trCharlie.insertCell();
+                tdCharlieCategory.innerHTML = "Charlie";
+                tdCharlieValue.innerHTML = charlieValue;
+            })
+    </script>
+</body>
+
+</html>
